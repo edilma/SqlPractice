@@ -1,0 +1,5 @@
+SELECT Name
+FROM Purchasing.Vendor
+WHERE NAME LIKE 'C%' 
+AND (NAME LIKE '%BIKE%' OR NAME LIKE '%BICYCLE%')
+;
