@@ -20,6 +20,7 @@ UPDATE dbo.ProductCategories
 	SET CreationDate = GETDATE()
 	FROM inserted
 	WHERE ProductCategories.CategoryID = inserted.CategoryID
+PRINT 'New records had been created'
 ;
 GO
 
