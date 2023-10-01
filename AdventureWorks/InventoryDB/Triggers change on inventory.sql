@@ -11,7 +11,7 @@ CREATE OR ALTER TRIGGER dbo.InventoryChangeLog
 ON dbo.Products
 AFTER UPDATE
 AS
-BEGIN
+SET NOCOUNT ON;
 IF UPDATE(QuantityOnHand)
 	INSERT INTO dbo.InventoryAudit (ProductID, EventTimeStamp, OldQuantity, NewQuantity)
 	VALUES (
@@ -21,5 +21,22 @@ IF UPDATE(QuantityOnHand)
 		(SELECT inserted.QuantityOnHand FROM inserted)
 );
 
+-- Check that the trigger works only in update QuantityOnHand
+UPDATE dbo.Products
+SET QuantityOnHand = 10
+WHERE ProductID = 1;
 
-WHERE ProductID = inserted.ProductID
+SELECT * FROM dbo.Products;
+SELECT * FROM dbo.InventoryAudit;
+
+INSERT INTO dbo.Products (ProductName, QuantityOnHand)
+	VALUES ('AAA Battery', 0)
+;
+GO
+
+UPDATE dbo.Products
+SET LastRestocked = GETDATE()
+WHERE ProductID = 1;
+
+SELECT * FROM dbo.Products;
+SELECT * FROM dbo.InventoryAudit;
